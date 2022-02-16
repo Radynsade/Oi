@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/PlayerOutline.png-f0b92460c697a06e91c40bdcff347796.stex"
+path="res://.import/Logo.png-81f5ccc333f5ba00708c69f9d8f0cd54.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/PlayerOutline.png"
-dest_files=[ "res://.import/PlayerOutline.png-f0b92460c697a06e91c40bdcff347796.stex" ]
+source_file="res://assets/textures/Logo.png"
+dest_files=[ "res://.import/Logo.png-81f5ccc333f5ba00708c69f9d8f0cd54.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
