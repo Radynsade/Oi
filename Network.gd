@@ -5,7 +5,7 @@ const MAX_CLIENTS = 32
 
 var server = null
 var client = null
-var ipAddress = ""
+var local_ip = ""
 
 func create_server() -> void:
 	server = NetworkedMultiplayerENet.new()
@@ -14,20 +14,20 @@ func create_server() -> void:
 	
 func join_server() -> void:
 	client = NetworkedMultiplayerENet.new()
-	client.create_client(ipAddress, DEFAULT_PORT)
+	client.create_client(local_ip, DEFAULT_PORT)
 	get_tree().set_network_peer(client)
 
 func _ready() -> void:
 	if OS.get_name() == "Windows":
-		ipAddress = IP.get_local_addresses()[3]
+		local_ip = IP.get_local_addresses()[3]
 	elif OS.get_name() == "Android":
-		ipAddress = IP.get_local_addresses()[0]
+		local_ip = IP.get_local_addresses()[0]
 	else:
-		ipAddress = IP.get_local_addresses()[3]
+		local_ip = IP.get_local_addresses()[3]
 		
 	for ip in IP.get_local_addresses():
 		if ip.begins_with("192.168."):
-			ipAddress = ip
+			local_ip = ip
 			break
 			
 	get_tree().connect("connected_to_server", self, "_connected_to_server")
