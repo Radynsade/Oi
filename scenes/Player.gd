@@ -30,18 +30,27 @@ func _ready():
 	var bodySprite = get_node("BodySprite")
 	bodySprite.material.set_shader_param("fillColor", color)
 
-func _physics_process(delta):
+func _process(delta):
 	if is_network_master():
 		process_input()
 		move_and_collide(velocity)
 		look_at(get_global_mouse_position())
-
-func _process(delta):
-	if not is_network_master():
-		rotation_degrees = lerp_angle(rotation_degrees, puppet_rotation, delta * 8)
+	else:
+		rotation_degrees = lerp_angle(
+			deg2rad(rotation_degrees),
+			deg2rad(puppet_rotation),
+			delta * 8
+		)
 		
 		if not tween.is_active():
 			move_and_collide(puppet_velocity)
+
+# func _process(delta):
+#	if not is_network_master():
+#		rotation_degrees = lerp_angle(rotation_degrees, puppet_rotation, delta * 8)
+#		
+#		if not tween.is_active():
+#			move_and_collide(puppet_velocity * speed)
 
 func _on_NetworkTickRate_timeout():
 	if is_network_master():
