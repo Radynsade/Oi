@@ -8,3 +8,6 @@ func _on_SettingsButton_pressed():
 
 func _on_QuitButton_pressed():
 	get_tree().quit()
+
+func _on_MultiplayerButton_pressed():
+	pass # Replace with function body.
