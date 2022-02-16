@@ -8,7 +8,7 @@
 code = "shader_type canvas_item;
 
 uniform vec4 replaceColor = vec4(1.0, 0.0, 1.0, 1.0);
-uniform vec4 fillColor;
+uniform vec4 fillColor = vec4(1.0, 1.0, 1.0, 1.0);
 
 void fragment() {
 	vec4 currentPixel = texture(TEXTURE, UV);
@@ -23,11 +23,11 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id=3]
 shader = SubResource( 2 )
 shader_param/replaceColor = Plane( 1, 0, 1, 1 )
-shader_param/fillColor = null
+shader_param/fillColor = Plane( 1, 1, 1, 1 )
 
 [sub_resource type="CircleShape2D" id=1]
 
-[node name="KinematicBody2D" type="KinematicBody2D"]
+[node name="Player" type="KinematicBody2D"]
 script = ExtResource( 3 )
 
 [node name="BodySprite" type="Sprite" parent="."]

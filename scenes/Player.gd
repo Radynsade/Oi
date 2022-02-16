@@ -1,21 +1,21 @@
 extends KinematicBody2D
 
-var color = Color(0.0, 1.0, 0.5, 1.0)
+var color = Color(0.0, 0.9, 0.5, 1.0)
 var speed = 7
 var velocity = Vector2.ZERO
 
 func process_input():
 	if Input.is_action_pressed("player_up"):
-		velocity.y -= 1
+		velocity.y = -1
 	elif Input.is_action_pressed("player_down"):
-		velocity.y += 1
+		velocity.y = 1
 	else:
 		velocity.y = 0
 	
 	if Input.is_action_pressed("player_left"):
-		velocity.x -= 1
+		velocity.x = -1
 	elif Input.is_action_pressed("player_right"):
-		velocity.x += 1
+		velocity.x = 1
 	else:
 		velocity.x = 0
 	
