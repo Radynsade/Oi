@@ -11,12 +11,13 @@ config_version=4
 [application]
 
 config/name="Oi"
-run/main_scene="res://scenes/MainMenu.tscn"
+run/main_scene="res://scenes/Menus.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
 Network="*res://Network.gd"
+MenuNavigation="*res://MenuNavigation.gd"
 
 [input]
 
