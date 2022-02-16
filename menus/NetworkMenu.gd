@@ -1,19 +1,30 @@
 extends Control
 
+onready var input_container = $InputContainer
 onready var my_ip_address_label = $IpContainer/LocalIpLabel
+onready var ip_input = $InputContainer/IpLineEdit
+onready var port_input = $InputContainer/PortLineEdit
 
-func _ready():
-	get_tree().connect("network_peer_connected", self, "_player_connected")
-	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
-	get_tree().connect("connected_to_server", self, "_connected_to_server")
-	
+func _ready():	
 	my_ip_address_label.text = "Local IP: " + str(Network.local_ip)
 
 func _on_BackButton_pressed():
 	MenuNavigation.load_menu(MenuNavigation.MENU_TYPE.MAIN)
 
 func _on_ConnectButton_pressed():
-	MenuNavigation.load_menu(MenuNavigation.MENU_TYPE.CONNECT_SERVER)
+	if ip_input.text != "":
+		input_container.hide()
+		
+		if port_input.text != "":
+			Network.join_server(ip_input.text, int(port_input.text))
+		else:
+			Network.join_server(ip_input.text)
 
 func _on_CreateServerButton_pressed():
-	MenuNavigation.load_menu(MenuNavigation.MENU_TYPE.CREATE_SERVER)
+	input_container.hide()
+	
+	if port_input.text != "":
+		Network.create_server(int(port_input.text))
+	else:
+		Network.create_server()
+

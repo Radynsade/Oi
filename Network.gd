@@ -7,14 +7,17 @@ var server = null
 var client = null
 var local_ip = ""
 
-func create_server() -> void:
+func create_server(port: int = DEFAULT_PORT) -> void:
 	server = NetworkedMultiplayerENet.new()
-	server.create_server(DEFAULT_PORT, MAX_CLIENTS)
+	server.create_server(port, MAX_CLIENTS)
 	get_tree().set_network_peer(server)
-	
-func join_server() -> void:
+
+func join_server(
+	ip: String,
+	port: int = DEFAULT_PORT
+) -> void:
 	client = NetworkedMultiplayerENet.new()
-	client.create_client(local_ip, DEFAULT_PORT)
+	client.create_client(ip, port)
 	get_tree().set_network_peer(client)
 
 func _ready() -> void:
@@ -30,11 +33,30 @@ func _ready() -> void:
 			local_ip = ip
 			break
 			
+	# Server
+	get_tree().connect("network_peer_connected", self, "_player_connected")
+	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
+	
+	# Client
 	get_tree().connect("connected_to_server", self, "_connected_to_server")
 	get_tree().connect("server_disconnected", self, "_server_disconnected")
+	get_tree().connect("connection_failed", self, "_connection_failed")
+
+# Server
+
+func _player_connected(id) -> void:
+	print("Player " + str(id) + " has connected")
+	
+func _player_disconnected(id) -> void:
+	print("Player " + str(id) + " has disconnected")
+
+# Client
 
 func _connected_to_server() -> void:
 	print("Successfuly connected to the server")
 	
 func _server_disconnected() -> void:
 	print("Disconnected from the server")
+	
+func _connection_failed() -> void:
+	print("Connection failed")

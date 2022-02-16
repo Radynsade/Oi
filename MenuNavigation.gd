@@ -8,14 +8,11 @@ enum MENU_TYPE {
 	SETTINGS,
 	NETWORK,
 	CREATE_SERVER,
-	CONNECT_SERVER
 }
 
 var menus = {
 	MENU_TYPE.MAIN: preload("res://menus//MainMenu.tscn").instance(),
 	MENU_TYPE.NETWORK: preload("res://menus//NetworkMenu.tscn").instance(),
-	MENU_TYPE.CONNECT_SERVER: preload("res://menus//ConnectMenu.tscn").instance(),
-	MENU_TYPE.CREATE_SERVER: preload("res://menus//CreateServerMenu.tscn").instance(),
 }
 
 var currentMenu : Node = null
