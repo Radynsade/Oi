@@ -45,13 +45,6 @@ func _process(delta):
 		if not tween.is_active():
 			move_and_collide(puppet_velocity)
 
-# func _process(delta):
-#	if not is_network_master():
-#		rotation_degrees = lerp_angle(rotation_degrees, puppet_rotation, delta * 8)
-#		
-#		if not tween.is_active():
-#			move_and_collide(puppet_velocity * speed)
-
 func _on_NetworkTickRate_timeout():
 	if is_network_master():
 		rset_unreliable("puppet_position", global_position)
