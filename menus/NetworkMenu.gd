@@ -27,4 +27,6 @@ func _on_CreateServerButton_pressed():
 		Network.create_server(int(port_input.text))
 	else:
 		Network.create_server()
+	
+	Network.init_player(get_tree().get_network_unique_id())
 

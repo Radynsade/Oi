@@ -42,3 +42,11 @@ texture = ExtResource( 2 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 scale = Vector2( 3, 3 )
 shape = SubResource( 1 )
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="NetworkTickRate" type="Timer" parent="."]
+wait_time = 0.05
+autostart = true
+
+[connection signal="timeout" from="NetworkTickRate" to="." method="_on_NetworkTickRate_timeout"]
