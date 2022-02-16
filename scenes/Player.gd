@@ -36,10 +36,10 @@ func _process(delta):
 		move_and_collide(velocity)
 		look_at(get_global_mouse_position())
 	else:
-		rotation_degrees = lerp_angle(
-			deg2rad(rotation_degrees),
-			deg2rad(puppet_rotation),
-			delta * 8
+		rotation = lerp(
+			rotation,
+			puppet_rotation,
+			delta * 4
 		)
 		
 		if not tween.is_active():
@@ -55,5 +55,5 @@ func _process(delta):
 func _on_NetworkTickRate_timeout():
 	if is_network_master():
 		rset_unreliable("puppet_position", global_position)
-		rset_unreliable("puppet_rotation", rotation_degrees)
+		rset_unreliable("puppet_rotation", rotation)
 		rset_unreliable("puppet_velocity", velocity)
