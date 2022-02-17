@@ -47,16 +47,19 @@ func _ready():
 	var bodySprite = get_node("BodySprite")
 	bodySprite.material.set_shader_param("fillColor", color)
 
-func _process(delta):
+func _physics_process(delta):
 	if is_network_master():
 		process_input()
 		move_and_collide(velocity)
+
+func _process(delta):
+	if is_network_master():
 		look_at(get_global_mouse_position())
 	else:
 		rotation = lerp(
 			rotation,
 			puppet_rotation,
-			delta * 4
+			delta * 2
 		)
 		
 		if not tween.is_active():
