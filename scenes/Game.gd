@@ -27,7 +27,9 @@ func init_player(id: int) -> KinematicBody2D:
 
 func remove_player(id: int) -> void:
 	if players_container.has_node(str(id)):
-		get_node(str(id)).queue_free()
+		var player_instance = players_container.get_node(str(id))
+		players_container.remove_child(player_instance)
+		player_instance.queue_free()
 
 func _ready():
 	start()
