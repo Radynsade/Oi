@@ -1,6 +1,7 @@
 extends Node
 
 var player = load("res://entities//Player.tscn")
+var camera: Camera2D
 onready var map_container = $Map
 onready var players_container = $Players
 
@@ -12,7 +13,7 @@ func set_map(name: String) -> void:
 func start() -> void:
 	set_map("Garden")
 
-func init_player(id: int) -> void:
+func init_player(id: int) -> KinematicBody2D:
 	var player_instance = Global.init_node_at_location(
 		player,
 		players_container,
@@ -21,6 +22,8 @@ func init_player(id: int) -> void:
 	
 	player_instance.name = str(id)
 	player_instance.set_network_master(id)
+	
+	return player_instance
 
 func remove_player(id: int) -> void:
 	if players_container.has_node(str(id)):
@@ -28,7 +31,12 @@ func remove_player(id: int) -> void:
 
 func _ready():
 	start()
-	init_player(get_tree().get_network_unique_id())
+	
+	var local_player = init_player(get_tree().get_network_unique_id())
+	var camera = Camera2D.new()
+	camera._set_current(true)
+	camera.set_enable_follow_smoothing(true)
+	local_player.add_child(camera)
 	
 	# Server
 	get_tree().connect("network_peer_connected", self, "_player_connected")
