@@ -20,6 +20,7 @@ var power = 10
 
 # Technical
 var velocity = Vector2.ZERO
+var direction = Vector2.ZERO
 puppet var puppet_position = Vector2(0, 0) setget puppet_position_set
 puppet var puppet_rotation = 0
 puppet var puppet_velocity = Vector2()
@@ -31,6 +32,9 @@ func process_input():
 	velocity.x = int(Input.is_action_pressed("player_right")) - int(Input.is_action_pressed("player_left"))
 	velocity.y = int(Input.is_action_pressed("player_down")) - int(Input.is_action_pressed("player_up"))
 	velocity = velocity.normalized() * speed
+
+func process_fov():
+	var direction = Vector2(cos(global_rotation), sin(global_rotation))
 
 func puppet_position_set(new_value: Vector2) -> void:
 	puppet_position = new_value
@@ -52,27 +56,16 @@ func _ready():
 func _physics_process(delta):
 	if is_network_master():
 		process_input()
+		process_fov()
 		move_and_slide(velocity)
 
 func _process(delta):
-	# var fps = Engine.get_frames_per_second()
-	# var lerp_interval = velocity / fps
-	# var lerp_position = global_position + lerp_interval
-	
-	# if fps > 60:
-	# 	body_sprite.set_as_toplevel(true)
-	# 	shadow_sprite.set_as_toplevel(true)
-	# 	body_sprite.global_rotation = global_rotation
-	# 	body_sprite.global_position = body_sprite.global_position.linear_interpolate(lerp_position, 10 * delta)
-	# 	shadow_sprite.global_rotation = global_rotation
-	# 	shadow_sprite.global_position = shadow_sprite.global_position.linear_interpolate(lerp_position, 10 * delta)
-	# else:
-	#	body_sprite.global_position = global_position
-	#	body_sprite.set_as_toplevel(false)
-	#	shadow_sprite.global_position = global_position
-	#	shadow_sprite.set_as_toplevel(false)
-	
-	Render.movement_jitter_fix(self, velocity, delta, [body_sprite, shadow_sprite])
+	Render.movement_jitter_fix(
+		self,
+		velocity,
+		delta,
+		[body_sprite, shadow_sprite]
+	)
 	
 	if is_network_master():
 		look_at(get_global_mouse_position())
