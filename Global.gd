@@ -10,8 +10,13 @@ var _states_scenes = {
 	STATES.MENUS: "res://scenes//Menus.tscn"
 }
 
+var _debug_on: bool = false
+
 # DO NOT MUTATE THIS OUTSIDE THIS CLASS!
 var _current_state: int = STATES.MENUS
+
+func is_debug_on() -> bool:
+	return _debug_on
 
 func fatal_error(text: String) -> void:
 	push_error(text)
@@ -53,3 +58,8 @@ func set_state(state: int) -> void:
 
 func is_game_state() -> bool:
 	return _current_state == STATES.GAME
+
+func _process(delta):
+	if Input.is_action_just_pressed("debug_visibility"):
+		_debug_on = !_debug_on
+		print(is_debug_on())
