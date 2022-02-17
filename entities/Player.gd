@@ -1,7 +1,24 @@
 extends KinematicBody2D
 
-var color = Color(0.0, 0.9, 0.5, 1.0)
+const DEFAULT_ABILITY_VALUE: int = 4
+const MAX_ABILITY_VALUE: int = 8
+const MIN_ABILITY_VALUE: int = 1
+
+# Skin
+var color: Color = Color(0.0, 0.9, 0.5, 1.0)
+
+# Abilities
+var ability_speed: int = 4
+var ability_fov: int = 4
+var ability_health: int = 4
+var ability_power: int = 4
+
 var speed = 7
+var field_of_view = 75
+var health = 100
+var power = 10
+
+# Technical
 var velocity = Vector2.ZERO
 puppet var puppet_position = Vector2(0, 0) setget puppet_position_set
 puppet var puppet_rotation = 0

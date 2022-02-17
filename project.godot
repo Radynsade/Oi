@@ -21,6 +21,12 @@ MenuNavigation="*res://MenuNavigation.gd"
 Global="*res://Global.gd"
 Game="*res://scenes/Game.tscn"
 
+[importer_defaults]
+
+texture={
+"flags/filter": false
+}
+
 [input]
 
 player_up={
