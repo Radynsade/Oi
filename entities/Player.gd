@@ -55,22 +55,24 @@ func _physics_process(delta):
 		move_and_slide(velocity)
 
 func _process(delta):
-	var fps = Engine.get_frames_per_second()
-	var lerp_interval = velocity / fps
-	var lerp_position = global_position + lerp_interval
+	# var fps = Engine.get_frames_per_second()
+	# var lerp_interval = velocity / fps
+	# var lerp_position = global_position + lerp_interval
 	
-	if fps > 60:
-		body_sprite.set_as_toplevel(true)
-		shadow_sprite.set_as_toplevel(true)
-		body_sprite.global_rotation = global_rotation
-		body_sprite.global_position = body_sprite.global_position.linear_interpolate(lerp_position, 10 * delta)
-		shadow_sprite.global_rotation = global_rotation
-		shadow_sprite.global_position = shadow_sprite.global_position.linear_interpolate(lerp_position, 10 * delta)
-	else:
-		body_sprite.global_position = global_position
-		body_sprite.set_as_toplevel(false)
-		shadow_sprite.global_position = global_position
-		shadow_sprite.set_as_toplevel(false)
+	# if fps > 60:
+	# 	body_sprite.set_as_toplevel(true)
+	# 	shadow_sprite.set_as_toplevel(true)
+	# 	body_sprite.global_rotation = global_rotation
+	# 	body_sprite.global_position = body_sprite.global_position.linear_interpolate(lerp_position, 10 * delta)
+	# 	shadow_sprite.global_rotation = global_rotation
+	# 	shadow_sprite.global_position = shadow_sprite.global_position.linear_interpolate(lerp_position, 10 * delta)
+	# else:
+	#	body_sprite.global_position = global_position
+	#	body_sprite.set_as_toplevel(false)
+	#	shadow_sprite.global_position = global_position
+	#	shadow_sprite.set_as_toplevel(false)
+	
+	Render.movement_jitter_fix(self, velocity, delta, [body_sprite, shadow_sprite])
 	
 	if is_network_master():
 		look_at(get_global_mouse_position())
