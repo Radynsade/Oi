@@ -1,5 +1,22 @@
 extends Node
 
+enum STATES {
+	GAME,
+	MENUS
+}
+
+var _states_scenes = {
+	STATES.GAME: "res://scenes//Game.tscn",
+	STATES.MENUS: "res://scenes//Menus.tscn"
+}
+
+# DO NOT MUTATE THIS OUTSIDE THIS CLASS!
+var _current_state: int = STATES.MENUS
+
+func fatal_error(text: String) -> void:
+	push_error(text)
+	get_tree().quit()
+
 func init_node(
 	node: Object,
 	parent: Object
@@ -16,3 +33,23 @@ func init_node_at_location(
 	var instance = init_node(node, parent)
 	instance.global_position = location
 	return instance
+
+func clean_node(node: Node) -> void:
+	for child in node.get_children():
+		node.remove_child(child)
+		child.queue_free()
+
+func get_state() -> int:
+	return _current_state
+
+func set_state(state: int) -> void:
+	match state:
+		STATES.GAME:
+			get_tree().change_scene(_states_scenes[STATES.GAME])
+		STATES.MENUS:
+			get_tree().change_scene(_states_scenes[STATES.MENUS])
+	
+	_current_state = state
+
+func is_game_state() -> bool:
+	return _current_state == STATES.GAME

@@ -19,7 +19,7 @@ config/icon="res://icon.png"
 Network="*res://Network.gd"
 MenuNavigation="*res://MenuNavigation.gd"
 Global="*res://Global.gd"
-Game="*res://scenes/Game.tscn"
+Game="*res://Game.gd"
 
 [importer_defaults]
 

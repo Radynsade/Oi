@@ -30,7 +30,7 @@ func _deferred_load_menu(menuType) -> void:
 		menuNode.set_name(MENU_NODE_NAME)
 		currentScene.add_child(menuNode)
 		container = menuNode
-		
+	
 	for child in container.get_children():
 		container.remove_child(child)
 		

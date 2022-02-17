@@ -13,6 +13,9 @@ func create_server(port: int = DEFAULT_PORT) -> void:
 	server.create_server(port, MAX_CLIENTS)
 	get_tree().set_network_peer(server)
 
+func create_server_from_game(port: int = DEFAULT_PORT) -> void:
+	Network.init_player(get_tree().get_network_unique_id())
+
 func join_server(
 	ip: String,
 	port: int = DEFAULT_PORT
