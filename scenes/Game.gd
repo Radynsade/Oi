@@ -27,6 +27,9 @@ func remove_player(id: int) -> void:
 		get_node(str(id)).queue_free()
 
 func _ready():
+	start()
+	init_player(get_tree().get_network_unique_id())
+	
 	# Server
 	get_tree().connect("network_peer_connected", self, "_player_connected")
 	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
@@ -34,9 +37,6 @@ func _ready():
 	# Client
 	get_tree().connect("connected_to_server", self, "_connected_to_server")
 	get_tree().connect("server_disconnected", self, "_server_disconnected")
-	
-	start()
-	init_player(get_tree().get_network_unique_id())
 
 # Server
 

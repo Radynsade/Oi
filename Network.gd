@@ -20,6 +20,7 @@ func join_server(
 	ip: String,
 	port: int = DEFAULT_PORT
 ) -> void:
+	Global.set_state(Global.STATES.GAME)
 	client = NetworkedMultiplayerENet.new()
 	client.create_client(ip, port)
 	get_tree().set_network_peer(client)
