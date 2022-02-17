@@ -5,6 +5,8 @@ enum STATES {
 	MENUS
 }
 
+signal debug_state_changed
+
 var _states_scenes = {
 	STATES.GAME: "res://scenes//Game.tscn",
 	STATES.MENUS: "res://scenes//Menus.tscn"
@@ -62,4 +64,4 @@ func is_game_state() -> bool:
 func _process(delta):
 	if Input.is_action_just_pressed("debug_visibility"):
 		_debug_on = !_debug_on
-		print(is_debug_on())
+		emit_signal("debug_state_changed")

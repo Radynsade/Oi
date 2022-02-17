@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://entities/Player.gd" type="Script" id=1]
 [ext_resource path="res://assets/textures/PlayerOutline.png" type="Texture" id=2]
@@ -27,6 +27,9 @@ shader_param/fillColor = Plane( 1, 1, 1, 1 )
 
 [sub_resource type="CircleShape2D" id=1]
 
+[sub_resource type="CircleShape2D" id=4]
+radius = 350.0
+
 [node name="Player" type="KinematicBody2D" groups=["detectable"]]
 script = ExtResource( 1 )
 
@@ -39,7 +42,7 @@ texture = ExtResource( 3 )
 scale = Vector2( 3, 3 )
 texture = ExtResource( 2 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape" type="CollisionShape2D" parent="."]
 scale = Vector2( 3, 3 )
 shape = SubResource( 1 )
 
@@ -49,4 +52,11 @@ shape = SubResource( 1 )
 wait_time = 0.05
 autostart = true
 
+[node name="ViewDistanceArea" type="Area2D" parent="."]
+
+[node name="ViewShape" type="CollisionShape2D" parent="ViewDistanceArea"]
+shape = SubResource( 4 )
+
 [connection signal="timeout" from="NetworkTickRate" to="." method="_on_NetworkTickRate_timeout"]
+[connection signal="body_entered" from="ViewDistanceArea" to="." method="_on_ViewDistanceArea_body_entered"]
+[connection signal="body_exited" from="ViewDistanceArea" to="." method="_on_ViewDistanceArea_body_exited"]
