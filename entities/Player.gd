@@ -49,9 +49,11 @@ func process_fov():
 		hit_positions.append(result_straight.position)
 	
 	for i in range(side_rays_amount):
-		var angle = deg2rad(i * ANGLE_BETWEEN_RAYS) + global_rotation
-		var vector_right = Vector2(cos(angle), sin(angle)).normalized() * distance_of_view + global_position
-		var vector_left = Vector2(cos(-angle), sin(-angle)).normalized() * distance_of_view + global_position
+		var relative_angle = deg2rad(i * ANGLE_BETWEEN_RAYS)
+		var angle_right = global_rotation + relative_angle
+		var angle_left = global_rotation - relative_angle
+		var vector_right = Vector2(cos(angle_right), sin(angle_right)).normalized() * distance_of_view + global_position
+		var vector_left = Vector2(cos(angle_left), sin(angle_left)).normalized() * distance_of_view + global_position
 		var result_right = space_state.intersect_ray(global_position, vector_right, [self], collision_mask)
 		var result_left = space_state.intersect_ray(global_position, vector_left, [self], collision_mask)
 		
