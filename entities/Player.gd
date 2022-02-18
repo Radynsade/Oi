@@ -33,8 +33,8 @@ puppet var puppet_position = Vector2(0, 0) setget puppet_position_set
 puppet var puppet_rotation = 0
 puppet var puppet_velocity = Vector2()
 onready var tween = $Tween
-onready var body_sprite = $BodySprite
-onready var shadow_sprite = $ShadowSprite
+onready var body_sprite = $Visual/BodySprite
+onready var shadow_sprite = $Visual/ShadowSprite
 
 func process_input():
 	velocity.x = int(Input.is_action_pressed("player_right")) - int(Input.is_action_pressed("player_left"))

@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://entities/Player.gd" type="Script" id=1]
 [ext_resource path="res://assets/textures/PlayerOutline.png" type="Texture" id=2]
 [ext_resource path="res://assets/textures/Player.png" type="Texture" id=3]
+[ext_resource path="res://addons/nojitter/no_jitter_2d.gd" type="Script" id=4]
 
 [sub_resource type="CircleShape2D" id=1]
 
@@ -48,12 +49,15 @@ autostart = true
 [node name="ViewShape" type="CollisionShape2D" parent="ViewDistanceArea"]
 shape = SubResource( 4 )
 
-[node name="BodySprite" type="Sprite" parent="."]
+[node name="Visual" type="Node2D" parent="."]
+script = ExtResource( 4 )
+
+[node name="BodySprite" type="Sprite" parent="Visual"]
 material = SubResource( 3 )
 scale = Vector2( 3, 3 )
 texture = ExtResource( 3 )
 
-[node name="ShadowSprite" type="Sprite" parent="."]
+[node name="ShadowSprite" type="Sprite" parent="Visual"]
 scale = Vector2( 3, 3 )
 texture = ExtResource( 2 )
 
