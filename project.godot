@@ -24,7 +24,7 @@ Render="*res://Render.gd"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/no_jitter/plugin.cfg", "res://addons/nojitter/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/no_jitter/plugin.cfg", "res://addons/nojitter/plugin.cfg", "res://addons/ray_vision/plugin.cfg" )
 
 [importer_defaults]
 
