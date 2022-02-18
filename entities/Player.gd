@@ -25,6 +25,8 @@ var debug_distance_of_view_color = Color(1, 1, 0, 0.1)
 var velocity = Vector2.ZERO
 var direction = Vector2.ZERO
 var hit_positions: PoolVector2Array = []
+var previous_detected_objects = {}
+var current_detected_objects = {}
 puppet var puppet_position = Vector2(0, 0) setget puppet_position_set
 puppet var puppet_rotation = 0
 puppet var puppet_velocity = Vector2()
@@ -37,7 +39,28 @@ func process_input():
 	velocity.y = int(Input.is_action_pressed("player_down")) - int(Input.is_action_pressed("player_up"))
 	velocity = velocity.normalized() * speed
 
+func process_ray_result(ray_result):
+	hit_positions.append(ray_result.position)
+	var collider = ray_result.collider
+	if collider.is_in_group("detectable"):
+		current_detected_objects[ray_result.collider_id] = collider
+
+func update_detectable_visibility():
+	var detected: bool
+	
+	for previous_id in previous_detected_objects.keys():
+		detected = false
+		
+		for current_id in current_detected_objects.keys():
+			if current_id == previous_id:
+				detected = true
+				break
+		
+		if !detected:
+			previous_detected_objects[previous_id].hide()
+
 func process_fov():
+	current_detected_objects = {}
 	hit_positions = []
 	
 	var side_rays_amount = field_of_view / ANGLE_BETWEEN_RAYS / 2
@@ -46,7 +69,7 @@ func process_fov():
 	var result_straight = space_state.intersect_ray(global_position, direction, [self], collision_mask)
 	
 	if result_straight:
-		hit_positions.append(result_straight.position)
+		process_ray_result(result_straight)
 	
 	for i in range(side_rays_amount):
 		var relative_angle = deg2rad(i * ANGLE_BETWEEN_RAYS)
@@ -58,22 +81,12 @@ func process_fov():
 		var result_left = space_state.intersect_ray(global_position, vector_left, [self], collision_mask)
 		
 		if result_right:
-			hit_positions.append(result_right.position)
-			
-			var collider = result_right.collider
-			
-			if collider.is_in_group("detectable"):
-				if !collider.is_visible():
-					collider.show()
+			process_ray_result(result_right)
 		
 		if result_left:
-			hit_positions.append(result_left.position)
-			
-			var collider = result_left.collider
-			
-			if collider.is_in_group("detectable"):
-				if !collider.is_visible():
-					collider.show()
+			process_ray_result(result_left)
+	
+	
 
 func puppet_position_set(new_value: Vector2) -> void:
 	puppet_position = new_value
