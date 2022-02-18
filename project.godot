@@ -22,6 +22,10 @@ MenuNavigation="*res://MenuNavigation.gd"
 Global="*res://Global.gd"
 Render="*res://Render.gd"
 
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/no_jitter/plugin.cfg", "res://addons/nojitter/plugin.cfg", "res://addons/smoothing/plugin.cfg" )
+
 [importer_defaults]
 
 texture={
@@ -62,6 +66,7 @@ debug_visibility={
 
 [physics]
 
+common/physics_fps=30
 common/enable_pause_aware_picking=true
 2d/thread_model=2
 

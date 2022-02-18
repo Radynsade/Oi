@@ -53,7 +53,6 @@ func _ready():
 func _player_connected(id) -> void:
 	print("Player " + str(id) + " has connected")
 	var player = init_player(id)
-	player.hide()
 
 func _player_disconnected(id) -> void:
 	print("Player " + str(id) + " has disconnected")

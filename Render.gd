@@ -1,6 +1,6 @@
 extends Node
 
-const _PHYSICS_FPS = 60
+const _PHYSICS_FPS = 30
 
 func movement_jitter_fix(
 	parent: Node,
@@ -12,12 +12,7 @@ func movement_jitter_fix(
 	var lerp_interval = velocity / fps
 	var lerp_position = parent.global_position + lerp_interval
 	
-	if fps > _PHYSICS_FPS:
-		for child in children_to_fix:
-			child.set_as_toplevel(true)
-			child.global_rotation = parent.global_rotation
-			child.global_position = child.global_position.linear_interpolate(lerp_position, 10 * delta)
-	else:
-		for child in children_to_fix:
-			child.set_as_toplevel(false)
-			child.global_position = parent.global_position
+	for child in children_to_fix:
+		child.set_as_toplevel(true)
+		child.global_rotation = parent.global_rotation
+		child.global_position = child.global_position.linear_interpolate(lerp_position, 10 * delta)

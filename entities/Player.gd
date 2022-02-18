@@ -1,5 +1,7 @@
 extends KinematicBody2D
 
+signal network_master_changed
+
 const DEFAULT_ABILITY_VALUE: int = 4
 const MAX_ABILITY_VALUE: int = 8
 const MIN_ABILITY_VALUE: int = 1
@@ -128,6 +130,10 @@ func draw_view_rays():
 		draw_line(Vector2.ZERO, relative_hit, Color.white)
 		draw_circle(relative_hit, 5, Color.white)
 
+func correct_master_visibility() -> void:
+	if !is_network_master():
+		hide()
+
 func _draw() -> void:
 	if !Global.is_debug_on():
 		return
@@ -138,11 +144,14 @@ func _draw() -> void:
 	draw_view_area()
 	draw_view_rays()
 
+func set_network_master(id: int, recursive: bool = true) -> void:
+	.set_network_master(id, recursive)
+	emit_signal("network_master_changed")
+
 func _ready():
-	var bodySprite = get_node("BodySprite")
-	bodySprite.material.set_shader_param("fillColor", color)
-	
+	body_sprite.material.set_shader_param("fillColor", color)
 	Global.connect("debug_state_changed", self, "update")
+	connect("network_master_changed", self, "correct_master_visibility")
 
 func _physics_process(delta):
 	if is_network_master():
@@ -152,12 +161,12 @@ func _physics_process(delta):
 		update()
 
 func _process(delta):
-	Render.movement_jitter_fix(
-		self,
-		velocity,
-		delta,
-		[body_sprite, shadow_sprite]
-	)
+	#Render.movement_jitter_fix(
+	#	self,
+	#	velocity,
+	#	delta,
+	#	[body_sprite, shadow_sprite]
+	#)
 	
 	if is_network_master():
 		look_at(get_global_mouse_position())
