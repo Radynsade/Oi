@@ -74,8 +74,13 @@ func draw_view_rays():
 		draw_line(Vector2.ZERO, relative_hit, Color.white)
 		draw_circle(relative_hit, 5, Color.white)
 
-func correct_master_visibility() -> void:
-	if !is_network_master():
+func on_network_master_change() -> void:
+	if is_network_master():
+		vision.connect("object_detected", self, "_on_Vision_object_detected")
+		vision.connect("object_left", self, "_on_Vision_object_left")
+	else:
+		vision.disconnect("object_detected", self, "_on_Vision_object_detected")
+		vision.disconnect("object_left", self, "_on_Vision_object_left")
 		hide()
 
 func _draw() -> void:
@@ -95,7 +100,7 @@ func set_network_master(id: int, recursive: bool = true) -> void:
 func _ready():
 	body_sprite.material.set_shader_param("fillColor", color)
 	Global.connect("debug_state_changed", self, "update")
-	connect("network_master_changed", self, "correct_master_visibility")
+	connect("network_master_changed", self, "on_network_master_change")
 
 func _physics_process(delta):
 	if is_network_master():

@@ -16,9 +16,9 @@ onready var _side_rays_amount = field_of_view / angle_between_rays / 2
 func _register_result(result: Dictionary) -> void:
 	hit_points.append(result.position)
 	var collider = result.collider
-	if collider.is_in_group("detectable") && not current_detected_objects[result.collider_id]:
-		emit_signal("object_detected", collider)
+	if collider.is_in_group("detectable") && !current_detected_objects.has(result.collider_id):
 		current_detected_objects[result.collider_id] = collider
+		emit_signal("object_detected", collider)
 
 func _cast_ray(angle: float) -> void:
 	var direction = Vector2(cos(global_rotation + angle), sin(global_rotation + angle)).normalized() * distance + global_position
