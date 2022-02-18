@@ -33,6 +33,7 @@ puppet var puppet_position = Vector2(0, 0) setget puppet_position_set
 puppet var puppet_rotation = 0
 puppet var puppet_velocity = Vector2()
 onready var tween = $Tween
+onready var visual = $Visual
 onready var body_sprite = $Visual/BodySprite
 onready var shadow_sprite = $Visual/ShadowSprite
 
@@ -40,6 +41,7 @@ func process_input():
 	velocity.x = int(Input.is_action_pressed("player_right")) - int(Input.is_action_pressed("player_left"))
 	velocity.y = int(Input.is_action_pressed("player_down")) - int(Input.is_action_pressed("player_up"))
 	velocity = velocity.normalized() * speed
+	visual.velocity = velocity
 
 func process_ray_result(ray_result):
 	hit_positions.append(ray_result.position)
@@ -51,14 +53,17 @@ func update_detectable_visibility():
 	var detected: bool
 	
 	for previous_id in previous_detected_objects.keys():
+		var object = previous_detected_objects[previous_id]
+		
+		if not object && object == null:
+			return
+		
 		detected = false
 		
 		for current_id in current_detected_objects.keys():
 			if current_id == previous_id:
 				detected = true
 				break
-		
-		var object = previous_detected_objects[previous_id]
 		
 		if !detected:
 			object.hide()
