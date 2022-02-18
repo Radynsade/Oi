@@ -47,7 +47,7 @@ autostart = true
 
 [node name="Vision" type="Node2D" parent="."]
 script = ExtResource( 5 )
-angle_between_rays = 3
+angle_between_rays = 2
 distance = 700.0
 field_of_view = 120.0
 

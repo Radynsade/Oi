@@ -83,6 +83,14 @@ func on_network_master_change() -> void:
 		vision.disconnect("object_left", self, "_on_Vision_object_left")
 		hide()
 
+func _short_angle_distance(from ,to):
+	var max_angle = PI * 2
+	var difference = fmod(to - from, max_angle)
+	return fmod(2 * difference, max_angle) - difference
+
+func _lerp_angle(from, to, weight):
+	return from + _short_angle_distance(from, to) * weight
+
 func _draw() -> void:
 	if !Global.is_debug_on():
 		return
@@ -113,11 +121,16 @@ func _process(delta):
 	if is_network_master():
 		look_at(get_global_mouse_position())
 	else:
-		rotation = lerp(
+		rotation = _lerp_angle(
 			rotation,
 			puppet_rotation,
-			delta * 2
+			delta * 16
 		)
+		#rotation = lerp(
+		#	rotation,
+		#	puppet_rotation,
+		#	delta * 2
+		#)
 		
 		if not tween.is_active():
 			move_and_slide(puppet_velocity)
