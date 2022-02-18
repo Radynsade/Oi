@@ -3,7 +3,7 @@ extends KinematicBody2D
 const DEFAULT_ABILITY_VALUE: int = 4
 const MAX_ABILITY_VALUE: int = 8
 const MIN_ABILITY_VALUE: int = 1
-const ANGLE_BETWEEN_RAYS: float = 5.0
+const ANGLE_BETWEEN_RAYS: float = 3.0
 
 # Skin
 var color: Color = Color(0.0, 0.9, 0.5, 1.0)
@@ -15,13 +15,13 @@ var ability_health: int = 4
 var ability_power: int = 4
 
 var speed = 350
-var distance_of_view = 350
+var distance_of_view = 700
 var field_of_view = 120
 var health = 100
 var power = 10
 
 # Technical
-var debug_distance_of_view_color = Color(1, 1, 0, 0.3)
+var debug_distance_of_view_color = Color(1, 1, 0, 0.1)
 var velocity = Vector2.ZERO
 var direction = Vector2.ZERO
 var hit_positions: PoolVector2Array = []
@@ -59,9 +59,21 @@ func process_fov():
 		
 		if result_right:
 			hit_positions.append(result_right.position)
+			
+			var collider = result_right.collider
+			
+			if collider.is_in_group("detectable"):
+				if !collider.is_visible():
+					collider.show()
 		
 		if result_left:
 			hit_positions.append(result_left.position)
+			
+			var collider = result_left.collider
+			
+			if collider.is_in_group("detectable"):
+				if !collider.is_visible():
+					collider.show()
 
 func puppet_position_set(new_value: Vector2) -> void:
 	puppet_position = new_value
@@ -99,6 +111,9 @@ func draw_view_rays():
 
 func _draw() -> void:
 	if !Global.is_debug_on():
+		return
+	
+	if !is_network_master():
 		return
 	
 	draw_view_area()
