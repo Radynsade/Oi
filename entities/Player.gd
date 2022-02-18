@@ -79,12 +79,22 @@ func draw_view_area():
 
 func draw_view_rays():
 	var side_rays_amount = field_of_view / ANGLE_BETWEEN_RAYS / 2
+	var space_state = get_world_2d().direct_space_state
+	print(space_state)
 	
 	for i in range(side_rays_amount):
 		var angle = deg2rad(i * ANGLE_BETWEEN_RAYS)
+		var vector_right = Vector2(cos(angle), sin(angle)).normalized()
+		var vector_left = Vector2(cos(-angle), sin(-angle)).normalized()
+		var result_right = space_state.intersect_ray(global_position, vector_right, [self])
+		var result_left = space_state.intersect_ray(global_position, vector_left, [self])
 		
-		draw_line(Vector2.ZERO, Vector2(cos(angle), sin(angle)) * distance_of_view, Color.white)
-		draw_line(Vector2.ZERO, Vector2(cos(-angle), sin(-angle)) * distance_of_view, Color.white)
+		print(result_right)
+		
+		#draw_line(Vector2.ZERO, Vector2(cos(angle), sin(angle)) * distance_of_view, Color.white)
+		#draw_line(Vector2.ZERO, Vector2(cos(-angle), sin(-angle)) * distance_of_view, Color.white)
+		draw_line(Vector2.ZERO, result_right.position, Color.white)
+		draw_line(Vector2.ZERO, result_left.position, Color.white)
 	
 	draw_line(Vector2.ZERO, Vector2(distance_of_view, 0), Color.white)
 
