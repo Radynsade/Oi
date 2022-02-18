@@ -40,26 +40,26 @@ func process_input():
 func process_fov():
 	hit_positions = []
 	
-	# var side_rays_amount = field_of_view / ANGLE_BETWEEN_RAYS / 2
+	var side_rays_amount = field_of_view / ANGLE_BETWEEN_RAYS / 2
 	var space_state = get_world_2d().direct_space_state
-	var vector_straight = Vector2(cos(global_rotation), sin(global_rotation)).normalized() * distance_of_view
-	var result_straight = space_state.intersect_ray(global_position, vector_straight, [self], collision_mask)
+	var direction = Vector2(cos(global_rotation), sin(global_rotation)).normalized() * distance_of_view + global_position
+	var result_straight = space_state.intersect_ray(global_position, direction, [self], collision_mask)
 	
 	if result_straight:
 		hit_positions.append(result_straight.position)
 	
-	# for i in range(side_rays_amount):
-	#	var angle = deg2rad(i * ANGLE_BETWEEN_RAYS)
-	#	var vector_right = Vector2(cos(angle), sin(angle)).normalized() * distance_of_view
-	#	var vector_left = Vector2(cos(-angle), sin(-angle)).normalized() * distance_of_view
-	#	var result_right = space_state.intersect_ray(global_position, vector_right, [self])
-	#	var result_left = space_state.intersect_ray(global_position, vector_left, [self])
-	#	
-	#	if result_right:
-	#		hit_positions.append(result_right.position)
-	#	
-	#	if result_left:
-	#		hit_positions.append(result_left.position)
+	for i in range(side_rays_amount):
+		var angle = deg2rad(i * ANGLE_BETWEEN_RAYS) + global_rotation
+		var vector_right = Vector2(cos(angle), sin(angle)).normalized() * distance_of_view + global_position
+		var vector_left = Vector2(cos(-angle), sin(-angle)).normalized() * distance_of_view + global_position
+		var result_right = space_state.intersect_ray(global_position, vector_right, [self], collision_mask)
+		var result_left = space_state.intersect_ray(global_position, vector_left, [self], collision_mask)
+		
+		if result_right:
+			hit_positions.append(result_right.position)
+		
+		if result_left:
+			hit_positions.append(result_left.position)
 
 func puppet_position_set(new_value: Vector2) -> void:
 	puppet_position = new_value
