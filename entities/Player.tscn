@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://entities/Player.gd" type="Script" id=1]
 [ext_resource path="res://assets/textures/PlayerOutline.png" type="Texture" id=2]
@@ -7,9 +7,6 @@
 [ext_resource path="res://addons/ray_vision/ray_vision_2d.gd" type="Script" id=5]
 
 [sub_resource type="CircleShape2D" id=1]
-
-[sub_resource type="CircleShape2D" id=4]
-radius = 350.0
 
 [sub_resource type="Shader" id=2]
 code = "shader_type canvas_item;
@@ -51,11 +48,6 @@ angle_between_rays = 2
 distance = 700.0
 field_of_view = 120.0
 
-[node name="ViewDistanceArea" type="Area2D" parent="."]
-
-[node name="ViewShape" type="CollisionShape2D" parent="ViewDistanceArea"]
-shape = SubResource( 4 )
-
 [node name="Visual" type="Node2D" parent="."]
 script = ExtResource( 4 )
 
@@ -69,5 +61,3 @@ scale = Vector2( 3, 3 )
 texture = ExtResource( 2 )
 
 [connection signal="timeout" from="NetworkTickRate" to="." method="_on_NetworkTickRate_timeout"]
-[connection signal="body_entered" from="ViewDistanceArea" to="." method="_on_ViewDistanceArea_body_entered"]
-[connection signal="body_exited" from="ViewDistanceArea" to="." method="_on_ViewDistanceArea_body_exited"]

@@ -124,13 +124,8 @@ func _process(delta):
 		rotation = _lerp_angle(
 			rotation,
 			puppet_rotation,
-			delta * 16
+			delta * 12
 		)
-		#rotation = lerp(
-		#	rotation,
-		#	puppet_rotation,
-		#	delta * 2
-		#)
 		
 		if not tween.is_active():
 			move_and_slide(puppet_velocity)
