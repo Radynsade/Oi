@@ -56,8 +56,13 @@ func update_detectable_visibility():
 				detected = true
 				break
 		
+		var object = previous_detected_objects[previous_id]
+		
 		if !detected:
-			previous_detected_objects[previous_id].hide()
+			object.hide()
+		else:
+			if !object.is_visible():
+				object.show()
 
 func process_fov():
 	current_detected_objects = {}
@@ -86,7 +91,8 @@ func process_fov():
 		if result_left:
 			process_ray_result(result_left)
 	
-	
+	update_detectable_visibility()
+	previous_detected_objects = current_detected_objects
 
 func puppet_position_set(new_value: Vector2) -> void:
 	puppet_position = new_value
