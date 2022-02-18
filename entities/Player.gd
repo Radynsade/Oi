@@ -3,7 +3,7 @@ extends KinematicBody2D
 const DEFAULT_ABILITY_VALUE: int = 4
 const MAX_ABILITY_VALUE: int = 8
 const MIN_ABILITY_VALUE: int = 1
-const ANGLE_BETWEEN_RAYS: float = 3.0
+const ANGLE_BETWEEN_RAYS: float = 5.0
 
 # Skin
 var color: Color = Color(0.0, 0.9, 0.5, 1.0)
@@ -24,6 +24,7 @@ var power = 10
 var debug_distance_of_view_color = Color(1, 1, 0, 0.3)
 var velocity = Vector2.ZERO
 var direction = Vector2.ZERO
+var hit_positions: PoolVector2Array = []
 puppet var puppet_position = Vector2(0, 0) setget puppet_position_set
 puppet var puppet_rotation = 0
 puppet var puppet_velocity = Vector2()
@@ -37,18 +38,28 @@ func process_input():
 	velocity = velocity.normalized() * speed
 
 func process_fov():
-	var direction = Vector2(cos(global_rotation), sin(global_rotation)).normalized()
-	var straight = Vector2(1, 0)
+	hit_positions = []
 	
-	direction.rotated()
-	# var dot_product: float
-	
-	# for node in get_tree().get_nodes_in_group("detectable"):
-	# 	if global_position.distance_to(node.global_position) < distance_of_view:
-	# 		dot_product = direction.dot()
-	
+	# var side_rays_amount = field_of_view / ANGLE_BETWEEN_RAYS / 2
 	var space_state = get_world_2d().direct_space_state
-	var result = space_state.intersect_ray(global_position, direction, [self])
+	var vector_straight = Vector2(cos(global_rotation), sin(global_rotation)).normalized() * distance_of_view
+	var result_straight = space_state.intersect_ray(global_position, vector_straight, [self], collision_mask)
+	
+	if result_straight:
+		hit_positions.append(result_straight.position)
+	
+	# for i in range(side_rays_amount):
+	#	var angle = deg2rad(i * ANGLE_BETWEEN_RAYS)
+	#	var vector_right = Vector2(cos(angle), sin(angle)).normalized() * distance_of_view
+	#	var vector_left = Vector2(cos(-angle), sin(-angle)).normalized() * distance_of_view
+	#	var result_right = space_state.intersect_ray(global_position, vector_right, [self])
+	#	var result_left = space_state.intersect_ray(global_position, vector_left, [self])
+	#	
+	#	if result_right:
+	#		hit_positions.append(result_right.position)
+	#	
+	#	if result_left:
+	#		hit_positions.append(result_left.position)
 
 func puppet_position_set(new_value: Vector2) -> void:
 	puppet_position = new_value
@@ -78,25 +89,11 @@ func draw_view_area():
 	draw_polygon(points, PoolColorArray([debug_distance_of_view_color]))
 
 func draw_view_rays():
-	var side_rays_amount = field_of_view / ANGLE_BETWEEN_RAYS / 2
-	var space_state = get_world_2d().direct_space_state
-	print(space_state)
-	
-	for i in range(side_rays_amount):
-		var angle = deg2rad(i * ANGLE_BETWEEN_RAYS)
-		var vector_right = Vector2(cos(angle), sin(angle)).normalized()
-		var vector_left = Vector2(cos(-angle), sin(-angle)).normalized()
-		var result_right = space_state.intersect_ray(global_position, vector_right, [self])
-		var result_left = space_state.intersect_ray(global_position, vector_left, [self])
+	for hit in hit_positions:
+		var relative_hit = (hit - global_position).rotated(-global_rotation)
 		
-		print(result_right)
-		
-		#draw_line(Vector2.ZERO, Vector2(cos(angle), sin(angle)) * distance_of_view, Color.white)
-		#draw_line(Vector2.ZERO, Vector2(cos(-angle), sin(-angle)) * distance_of_view, Color.white)
-		draw_line(Vector2.ZERO, result_right.position, Color.white)
-		draw_line(Vector2.ZERO, result_left.position, Color.white)
-	
-	draw_line(Vector2.ZERO, Vector2(distance_of_view, 0), Color.white)
+		draw_line(Vector2.ZERO, relative_hit, Color.white)
+		draw_circle(relative_hit, 5, Color.white)
 
 func _draw() -> void:
 	if !Global.is_debug_on():
@@ -113,10 +110,10 @@ func _ready():
 
 func _physics_process(delta):
 	if is_network_master():
-		update()
 		process_input()
-		# process_fov()
+		process_fov()
 		move_and_slide(velocity)
+		update()
 
 func _process(delta):
 	Render.movement_jitter_fix(

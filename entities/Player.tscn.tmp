@@ -1,0 +1,62 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://entities/Player.gd" type="Script" id=1]
+[ext_resource path="res://assets/textures/PlayerOutline.png" type="Texture" id=2]
+[ext_resource path="res://assets/textures/Player.png" type="Texture" id=3]
+
+[sub_resource type="Shader" id=2]
+code = "shader_type canvas_item;
+
+uniform vec4 replaceColor = vec4(1.0, 0.0, 1.0, 1.0);
+uniform vec4 fillColor = vec4(1.0, 1.0, 1.0, 1.0);
+
+void fragment() {
+	vec4 currentPixel = texture(TEXTURE, UV);
+	
+	if (currentPixel == replaceColor) {
+		COLOR = fillColor;
+	} else {
+		COLOR = currentPixel;
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = SubResource( 2 )
+shader_param/replaceColor = Plane( 1, 0, 1, 1 )
+shader_param/fillColor = Plane( 1, 1, 1, 1 )
+
+[sub_resource type="CircleShape2D" id=1]
+
+[sub_resource type="CircleShape2D" id=4]
+radius = 350.0
+
+[node name="Player" type="KinematicBody2D" groups=["detectable"]]
+script = ExtResource( 1 )
+
+[node name="BodySprite" type="Sprite" parent="."]
+material = SubResource( 3 )
+scale = Vector2( 3, 3 )
+texture = ExtResource( 3 )
+
+[node name="ShadowSprite" type="Sprite" parent="."]
+scale = Vector2( 3, 3 )
+texture = ExtResource( 2 )
+
+[node name="CollisionShape" type="CollisionShape2D" parent="."]
+scale = Vector2( 3, 3 )
+shape = SubResource( 1 )
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="NetworkTickRate" type="Timer" parent="."]
+wait_time = 0.05
+autostart = true
+
+[node name="ViewDistanceArea" type="Area2D" parent="."]
+
+[node name="ViewShape" type="CollisionShape2D" parent="ViewDistanceArea"]
+shape = SubResource( 4 )
+
+[connection signal="timeout" from="NetworkTickRate" to="." method="_on_NetworkTickRate_timeout"]
+[connection signal="body_entered" from="ViewDistanceArea" to="." method="_on_ViewDistanceArea_body_entered"]
+[connection signal="body_exited" from="ViewDistanceArea" to="." method="_on_ViewDistanceArea_body_exited"]
