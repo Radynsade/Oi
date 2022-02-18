@@ -19,5 +19,5 @@ func movement_jitter_fix(
 			child.global_position = child.global_position.linear_interpolate(lerp_position, 10 * delta)
 	else:
 		for child in children_to_fix:
-			child.global_position = parent.global_position
 			child.set_as_toplevel(false)
+			child.global_position = parent.global_position

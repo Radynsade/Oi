@@ -3,6 +3,7 @@ extends KinematicBody2D
 const DEFAULT_ABILITY_VALUE: int = 4
 const MAX_ABILITY_VALUE: int = 8
 const MIN_ABILITY_VALUE: int = 1
+const ANGLE_BETWEEN_RAYS: float = 3.0
 
 # Skin
 var color: Color = Color(0.0, 0.9, 0.5, 1.0)
@@ -14,13 +15,13 @@ var ability_health: int = 4
 var ability_power: int = 4
 
 var speed = 350
-var distance_of_view = 100
-var field_of_view = 90
+var distance_of_view = 350
+var field_of_view = 120
 var health = 100
 var power = 10
 
 # Technical
-var debug_distance_of_view_color = Color(1, 1, 0, 0.5)
+var debug_distance_of_view_color = Color(1, 1, 0, 0.3)
 var velocity = Vector2.ZERO
 var direction = Vector2.ZERO
 puppet var puppet_position = Vector2(0, 0) setget puppet_position_set
@@ -37,6 +38,8 @@ func process_input():
 
 func process_fov():
 	var direction = Vector2(cos(global_rotation), sin(global_rotation)).normalized()
+	var straight = Vector2(1, 0)
+	
 	direction.rotated()
 	# var dot_product: float
 	
@@ -60,11 +63,37 @@ func puppet_position_set(new_value: Vector2) -> void:
 	
 	tween.start()
 
+func draw_view_area():
+	var division = 32
+	var points = PoolVector2Array()
+	var angle_from = 90 - field_of_view / 2
+	var angle_to = 90 + field_of_view / 2
+	
+	points.push_back(Vector2.ZERO)
+	
+	for i in range(division + 1):
+		var point = deg2rad(angle_from + i * (angle_to - angle_from) / division - 90)
+		points.push_back(Vector2(cos(point), sin(point)) * distance_of_view)
+	
+	draw_polygon(points, PoolColorArray([debug_distance_of_view_color]))
+
+func draw_view_rays():
+	var side_rays_amount = field_of_view / ANGLE_BETWEEN_RAYS / 2
+	
+	for i in range(side_rays_amount):
+		var angle = deg2rad(i * ANGLE_BETWEEN_RAYS)
+		
+		draw_line(Vector2.ZERO, Vector2(cos(angle), sin(angle)) * distance_of_view, Color.white)
+		draw_line(Vector2.ZERO, Vector2(cos(-angle), sin(-angle)) * distance_of_view, Color.white)
+	
+	draw_line(Vector2.ZERO, Vector2(distance_of_view, 0), Color.white)
+
 func _draw() -> void:
 	if !Global.is_debug_on():
 		return
 	
-	draw_circle(Vector2.ZERO, distance_of_view, debug_distance_of_view_color)
+	draw_view_area()
+	draw_view_rays()
 
 func _ready():
 	var bodySprite = get_node("BodySprite")
@@ -74,6 +103,7 @@ func _ready():
 
 func _physics_process(delta):
 	if is_network_master():
+		update()
 		process_input()
 		# process_fov()
 		move_and_slide(velocity)
