@@ -3,6 +3,7 @@ use gdnative::{
 	api::{
 		Node,
 		Node2D,
+		KinematicBody2D,
 		Physics2DDirectSpaceState,
 		World2D
 	}
@@ -21,7 +22,7 @@ struct RayVision2D {
 	hit_points: Vector2Array,
 	current_detected_objects: Dictionary,
 	previous_detected_objects: Dictionary,
-	parent: Ref<Node>,
+	parent: Ref<KinematicBody2D>,
 	side_rays_amount: i32,
 	space_state: Ref<Physics2DDirectSpaceState>
 }
@@ -41,7 +42,7 @@ impl RayVision2D {
 		// 	reference.assume_safe()
 		// };
 		// let space_state = world_2d.direct_space_state().unwrap();
-		let parent = owner.get_parent().unwrap();
+		let parent: KinematicBody2D = owner.get_parent().unwrap();
 
 		Self {
 			angle_between_rays: 0.0,
@@ -56,12 +57,41 @@ impl RayVision2D {
 		}
 	}
 
+	fn register_result(result: Dictionary) {
+
+	}
+
+	fn cast_ray(&self, angle: f64, owner: TRef<Node2D>) {
+		let global_position = owner.global_position();
+		let sum = (angle + owner.global_rotation()) as f32;
+		let direction = Vector2::new(sum.cos(), sum.sin()).normalize()
+			* self.distance + global_position;
+
+		let space_state = unsafe { self.space_state.assume_safe() };
+		let parent = unsafe { self.parent.assume_safe() };
+		let mut exclude = VariantArray::new_shared();
+		exclude.push(owner);
+
+		let result = space_state.intersect_ray(
+			global_position,
+			direction,
+			exclude,
+			parent.collision_mask(),
+			true,
+			false
+		);
+
+		if result.is_empty() {
+			return
+		}
+
+		self.register_result(result);
+	}
+
 	#[export]
 	fn _physics_process(&mut self, owner: TRef<Node2D>) {
 		self.current_detected_objects = Dictionary::new_shared();
 		self.hit_points = Vector2Array::new();
-		let world_2d_ref = unsafe { owner.get_world_2d().unwrap() };
-		let world_2d = unsafe { world_2d_ref.assume_safe() };
-		let space_state = unsafe { world_2d.direct_space_state().unwrap().assume_safe() };
+		self.space_state = get_space_state(owner);
 	}
 }
