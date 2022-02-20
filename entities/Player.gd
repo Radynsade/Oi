@@ -136,12 +136,6 @@ func _on_NetworkTickRate_timeout():
 		rset_unreliable("puppet_rotation", rotation)
 		rset_unreliable("puppet_velocity", velocity)
 
-func _on_ViewDistanceArea_body_entered(body):
-	pass # Replace with function body.
-
-func _on_ViewDistanceArea_body_exited(body):
-	pass # Replace with function body.
-
 func _on_Vision_object_detected(object):
 	object.show()
 

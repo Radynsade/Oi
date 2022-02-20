@@ -8,6 +8,16 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Node",
+"class": "Menu",
+"language": "GDScript",
+"path": "res://tools/Menu.gd"
+} ]
+_global_script_class_icons={
+"Menu": ""
+}
+
 [application]
 
 config/name="Oi"
@@ -21,6 +31,7 @@ Network="*res://Network.gd"
 MenuNavigation="*res://MenuNavigation.gd"
 Global="*res://Global.gd"
 Render="*res://Render.gd"
+Menu="res://tools/Menu.gd"
 
 [editor_plugins]
 

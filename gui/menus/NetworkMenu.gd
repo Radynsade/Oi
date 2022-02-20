@@ -12,16 +12,15 @@ func _on_BackButton_pressed():
 	MenuNavigation.load_menu(MenuNavigation.MENU_TYPE.MAIN)
 
 func _on_ConnectButton_pressed():
+	MenuNavigation.unload_menus()
 	if ip_input.text != "":
-		input_container.hide()
-		
 		if port_input.text != "":
 			Network.join_server(ip_input.text, int(port_input.text))
 		else:
 			Network.join_server(ip_input.text)
 
 func _on_CreateServerButton_pressed():
-	input_container.hide()
+	MenuNavigation.unload_menus()
 	
 	if port_input.text != "":
 		Network.create_server_from_game(int(port_input.text))

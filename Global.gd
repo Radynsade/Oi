@@ -6,6 +6,7 @@ enum STATES {
 }
 
 signal debug_state_changed
+signal game_state_changed(state)
 
 var _states_scenes = {
 	STATES.GAME: "res://scenes//Game.tscn",
@@ -57,6 +58,7 @@ func set_state(state: int) -> void:
 			get_tree().change_scene(_states_scenes[STATES.MENUS])
 	
 	_current_state = state
+	emit_signal("game_state_changed", state)
 
 func is_game_state() -> bool:
 	return _current_state == STATES.GAME

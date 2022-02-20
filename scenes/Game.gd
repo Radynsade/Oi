@@ -50,13 +50,16 @@ func _ready():
 
 func _notification(what) -> void:
 	if what == NOTIFICATION_PREDELETE:
-		# Server
-		get_tree().disconnect("network_peer_connected", self, "_player_connected")
-		get_tree().disconnect("network_peer_disconnected", self, "_player_disconnected")
+		pass
+
+func _exit_tree():
+	# Server
+	get_tree().disconnect("network_peer_connected", self, "_player_connected")
+	get_tree().disconnect("network_peer_disconnected", self, "_player_disconnected")
 		
-		# Client
-		get_tree().disconnect("connected_to_server", self, "_connected_to_server")
-		get_tree().disconnect("server_disconnected", self, "_server_disconnected")
+	# Client
+	get_tree().disconnect("connected_to_server", self, "_connected_to_server")
+	get_tree().disconnect("server_disconnected", self, "_server_disconnected")
 
 # Server
 
