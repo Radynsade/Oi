@@ -10,7 +10,7 @@ signal game_state_changed(state)
 
 var _states_scenes = {
 	STATES.GAME: "res://scenes//Game.tscn",
-	STATES.MENUS: "res://scenes//Menus.tscn"
+	STATES.MENUS: "res://scenes//Home.tscn"
 }
 
 var _debug_on: bool = false

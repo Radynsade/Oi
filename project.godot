@@ -9,33 +9,31 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "Node",
-"class": "Menu",
+"base": "CanvasLayer",
+"class": "MenuNavigator",
 "language": "GDScript",
-"path": "res://tools/Menu.gd"
+"path": "res://addons/menu_navigation/menu_navigator.gd"
 } ]
 _global_script_class_icons={
-"Menu": ""
+"MenuNavigator": ""
 }
 
 [application]
 
 config/name="Oi"
-run/main_scene="res://scenes/Menus.tscn"
+run/main_scene="res://scenes/Home.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
 Debug="res://Debug.tscn"
 Network="*res://Network.gd"
-MenuNavigation="*res://MenuNavigation.gd"
 Global="*res://Global.gd"
 Render="*res://Render.gd"
-Menu="res://tools/Menu.gd"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/nojitter/plugin.cfg", "res://addons/ray_vision/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/menu_navigation/plugin.cfg", "res://addons/nojitter/plugin.cfg", "res://addons/ray_vision/plugin.cfg" )
 
 [importer_defaults]
 
