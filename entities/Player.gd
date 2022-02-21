@@ -23,6 +23,7 @@ var power = 10
 var debug_distance_of_view_color = Color(1, 1, 0, 0.1)
 var velocity = Vector2.ZERO
 var direction = Vector2.ZERO
+var weapon
 puppet var puppet_position = Vector2(0, 0) setget puppet_position_set
 puppet var puppet_rotation = 0
 puppet var puppet_velocity = Vector2()
@@ -37,6 +38,12 @@ func process_input():
 	velocity.y = int(Input.is_action_pressed("player_down")) - int(Input.is_action_pressed("player_up"))
 	velocity = velocity.normalized() * speed
 	visual.velocity = velocity
+	
+	if Input.is_action_just_pressed("player_attack"):
+		print("start attacking")
+	
+	if Input.is_action_just_released("player_attack"):
+		print("stop attacking")
 
 func process_fov():
 	pass
