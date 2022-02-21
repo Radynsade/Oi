@@ -27,4 +27,4 @@ func _on_CreateServerButton_pressed():
 		Network.create_server_from_game()
 
 func _on_BackButton_pressed():
-	go_to_node("Main")
+	go_to_node("Root")
