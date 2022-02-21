@@ -1,7 +1,8 @@
-extends Node
+extends Node2D
 
 var player = load("res://entities//Player.tscn")
 var camera: Camera2D
+var local_player: KinematicBody2D
 onready var map_container = $Map
 onready var players_container = $Players
 
@@ -31,14 +32,26 @@ func remove_player(id: int) -> void:
 		players_container.remove_child(player_instance)
 		player_instance.queue_free()
 
+func _control_camera_position(delta: float) -> void:
+	var mouse_position = get_global_mouse_position()
+	var target = local_player.global_position
+	var mid_x = (target.x + mouse_position.x) / 2
+	var mid_y = (target.y + mouse_position.y) / 2
+	
+	camera.global_position = camera.global_position.linear_interpolate(Vector2(mid_x, mid_y), delta * 5)
+
+func _process(delta: float) -> void:
+	_control_camera_position(delta)
+
 func _ready():
 	start()
 	
-	var local_player = init_player(get_tree().get_network_unique_id())
-	var camera = Camera2D.new()
+	local_player = init_player(get_tree().get_network_unique_id())
+	camera = Camera2D.new()
 	camera._set_current(true)
-	camera.set_enable_follow_smoothing(true)
-	local_player.add_child(camera)
+	add_child(camera)
+	#camera.set_enable_follow_smoothing(true)
+	#local_player.add_child(camera)
 	
 	# Server
 	get_tree().connect("network_peer_connected", self, "_player_connected")

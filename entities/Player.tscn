@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://entities/Player.gd" type="Script" id=1]
 [ext_resource path="res://assets/textures/PlayerOutline.png" type="Texture" id=2]
 [ext_resource path="res://assets/textures/Player.png" type="Texture" id=3]
 [ext_resource path="res://addons/nojitter/no_jitter_2d.gd" type="Script" id=4]
 [ext_resource path="res://addons/ray_vision/ray_vision_2d.gd" type="Script" id=5]
+[ext_resource path="res://assets/textures/PlayerHand.png" type="Texture" id=6]
 
 [sub_resource type="CircleShape2D" id=1]
 
@@ -59,5 +60,15 @@ texture = ExtResource( 3 )
 [node name="ShadowSprite" type="Sprite" parent="Visual"]
 scale = Vector2( 3, 3 )
 texture = ExtResource( 2 )
+
+[node name="LeftHand" type="Sprite" parent="Visual"]
+position = Vector2( 30, -27 )
+scale = Vector2( 3, 3 )
+texture = ExtResource( 6 )
+
+[node name="RightHand" type="Sprite" parent="Visual"]
+position = Vector2( 30, 27 )
+scale = Vector2( 3, 3 )
+texture = ExtResource( 6 )
 
 [connection signal="timeout" from="NetworkTickRate" to="." method="_on_NetworkTickRate_timeout"]
