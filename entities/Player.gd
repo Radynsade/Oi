@@ -23,13 +23,15 @@ var power = 10
 var debug_distance_of_view_color = Color(1, 1, 0, 0.1)
 var velocity = Vector2.ZERO
 var direction = Vector2.ZERO
-var weapon
+var Weapon = preload("res://weapons//Weapon.gd")
 puppet var puppet_position = Vector2(0, 0) setget puppet_position_set
 puppet var puppet_rotation = 0
 puppet var puppet_velocity = Vector2()
 onready var tween = $Tween
 onready var visual = $Visual
 onready var vision = $Vision
+onready var left_hand = $Visual/LeftHand
+onready var right_hand = $Visual/RightHand
 onready var body_sprite = $Visual/BodySprite
 onready var shadow_sprite = $Visual/ShadowSprite
 
@@ -95,6 +97,13 @@ func on_network_master_change() -> void:
 		vision.disconnect("object_detected", self, "_on_Vision_object_detected")
 		vision.disconnect("object_left", self, "_on_Vision_object_left")
 		hide()
+
+func attach_weapon(node: Weapon) -> void:
+	visual.add_child(node)
+	left_hand.position = node.left_hand_position
+	right_hand.position = node.right_hand_position
+	node.position = node.weapon_position
+	visual.move_child(node, 2)
 
 func _short_angle_distance(from ,to):
 	var max_angle = PI * 2

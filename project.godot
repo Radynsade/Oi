@@ -13,9 +13,15 @@ _global_script_classes=[ {
 "class": "MenuNavigator",
 "language": "GDScript",
 "path": "res://addons/menu_navigation/menu_navigator.gd"
+}, {
+"base": "Node2D",
+"class": "Weapon",
+"language": "GDScript",
+"path": "res://weapons/Weapon.gd"
 } ]
 _global_script_class_icons={
-"MenuNavigator": ""
+"MenuNavigator": "",
+"Weapon": ""
 }
 
 [application]

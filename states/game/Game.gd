@@ -1,5 +1,6 @@
 extends Node2D
 
+var weapon_pistol = preload("res://weapons//weapons//Pistol.tscn")
 var player = load("res://entities//Player.tscn")
 var camera: Camera2D
 var local_player: KinematicBody2D
@@ -23,6 +24,8 @@ func init_player(id: int) -> KinematicBody2D:
 	
 	player_instance.name = str(id)
 	player_instance.set_network_master(id)
+	var pistol = weapon_pistol.instance()
+	player_instance.attach_weapon(pistol)
 	
 	return player_instance
 
