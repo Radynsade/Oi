@@ -6,11 +6,17 @@
 
 [node name="Pistol" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
-right_hand_position = Vector2( 36, 27 )
+right_hand_position = Vector2( 36, 20 )
 right_hand_top = true
-weapon_position = Vector2( 36, 27 )
+weapon_position = Vector2( 36, 20 )
 
 [node name="Sprite" parent="." index="0"]
 position = Vector2( 9, -3 )
 scale = Vector2( 3, 3 )
 texture = ExtResource( 3 )
+
+[node name="ReloadTimer" type="Timer" parent="." index="2"]
+wait_time = 0.5
+
+[node name="ShootPoint" type="Position2D" parent="." index="3"]
+position = Vector2( 27, -9 )

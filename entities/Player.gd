@@ -40,12 +40,6 @@ func process_input():
 	velocity.y = int(Input.is_action_pressed("player_down")) - int(Input.is_action_pressed("player_up"))
 	velocity = velocity.normalized() * speed
 	visual.velocity = velocity
-	
-	if Input.is_action_just_pressed("player_attack"):
-		print("start attacking")
-	
-	if Input.is_action_just_released("player_attack"):
-		print("stop attacking")
 
 func process_fov():
 	pass
@@ -159,7 +153,9 @@ func _on_NetworkTickRate_timeout():
 		rset_unreliable("puppet_velocity", velocity)
 
 func _on_Vision_object_detected(object):
-	object.show()
+	if object:
+		object.show()
 
 func _on_Vision_object_left(object):
-	object.hide()
+	if object:
+		object.hide()
