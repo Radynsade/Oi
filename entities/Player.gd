@@ -86,6 +86,12 @@ func on_network_master_change() -> void:
 		vision.connect("object_detected", self, "_on_Vision_object_detected")
 		vision.connect("object_left", self, "_on_Vision_object_left")
 	else:
+		if !vision.is_connected("object_detected", self, "_on_Vision_object_detected"):
+			return
+		
+		if !vision.is_connected("object_left", self, "_on_Vision_object_left"):
+			return
+		
 		vision.disconnect("object_detected", self, "_on_Vision_object_detected")
 		vision.disconnect("object_left", self, "_on_Vision_object_left")
 		hide()

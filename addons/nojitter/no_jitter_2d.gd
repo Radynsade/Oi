@@ -3,15 +3,22 @@ extends Node2D
 const _PHYSICS_FPS = 60
 
 var velocity: Vector2
+var fix: bool = false
 onready var parent = get_parent()
 
 func _ready():
-	set_as_toplevel(true)
+	if parent.is_network_master():
+		fix = true
+		set_as_toplevel(true)
 
 func _physics_process(delta):
-	visible = parent.visible
+	if fix:
+		visible = parent.visible
 
 func _process(delta):
+	if !fix:
+		return
+	
 	var fps = Engine.get_frames_per_second()
 	var lerp_interval = velocity / fps
 	var lerp_position = parent.global_position + lerp_interval

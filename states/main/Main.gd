@@ -15,6 +15,7 @@ func _on_QuitButton_pressed():
 
 func _on_ConnectButton_pressed():
 	if ip_input.text != "":
+		print(ip_input.text)
 		if port_input.text != "":
 			Network.join_server(ip_input.text, int(port_input.text))
 		else:

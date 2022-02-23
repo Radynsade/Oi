@@ -30,6 +30,7 @@ Debug="res://Debug.tscn"
 Network="*res://Network.gd"
 Global="*res://Global.gd"
 Render="*res://Render.gd"
+Weapons="*res://Weapons.gd"
 
 [editor_plugins]
 
